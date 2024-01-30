@@ -1,0 +1,26 @@
+{
+  "name": "jwt-auth",
+  "version": "1.0.0",
+  "description": "",
+  "main": "app.js",
+  "dependencies": {
+    "dotenv": "^16.4.1",
+    "ejs": "^3.1.3",
+    "express": "^4.17.1",
+    "mongoose": "^8.1.1"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ahmettzorlutuna/JWT-ForBeginners.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ahmettzorlutuna/JWT-ForBeginners/issues"
+  },
+  "homepage": "https://github.com/ahmettzorlutuna/JWT-ForBeginners#readme"
+}
