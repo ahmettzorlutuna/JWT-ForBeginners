@@ -1,10 +1,12 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
+const authRoutes = require('./routes/authRoutes');
 dotenv.config();
 
 const app = express();
 
+app.use(express.json())
 app.use(express.static("public"));
 
 app.set("view engine", "ejs");
@@ -17,10 +19,12 @@ mongoose
   )
   .then((result) =>
     app.listen(3000, () => {
-      console.log(`JWT is listening on port ${3000}`);
+      console.log(`Connected to DB. JWT is listening on port ${3000}`);
     })
   )
   .catch((err) => console.log(err));
 
 app.get("/", (req, res) => res.render("home"));
 app.get("/smoothies", (req, res) => res.render("smoothies"));
+
+app.use("/auth",authRoutes)
