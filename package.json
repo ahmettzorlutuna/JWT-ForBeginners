@@ -22,5 +22,8 @@
   "bugs": {
     "url": "https://github.com/ahmettzorlutuna/JWT-ForBeginners/issues"
   },
-  "homepage": "https://github.com/ahmettzorlutuna/JWT-ForBeginners#readme"
+  "homepage": "https://github.com/ahmettzorlutuna/JWT-ForBeginners#readme",
+  "devDependencies": {
+    "eslint": "^8.56.0"
+  }
 }
