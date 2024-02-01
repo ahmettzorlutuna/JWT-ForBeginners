@@ -1,5 +1,13 @@
 const mongoose = require("mongoose");
+const bcrypt = require("bcrypt");
+
+// const { hash } = bcrypt;
 const { Schema } = mongoose;
+
+//User model interface
+// interface UserMethods{
+//   isValidPassword: (password: string) => Promise<Boolean>
+// }
 
 const userSchema = new Schema({
   email: {
@@ -22,15 +30,21 @@ const userSchema = new Schema({
   },
 });
 
-userSchema.post("save", function (doc, next) {
-  console.log('User was created',doc);
+//Password will be hash before use created.
+userSchema.pre("save", async function (next) {
+  const saltRounds = 10;
+  const salt = await bcrypt.genSalt(saltRounds);
+  const hashedPassword = await bcrypt.hash(this.password, salt);
+  this.password = hashedPassword;
   next();
 });
 
-userSchema.pre("save", function () {
-    console.log('User about to be created and saved',this);
-    next();
-  });
+//post middleware are executed after the hooked method and all of its pre middleware have completed.
+
+// userSchema.post("save", function (doc, next) {
+//   console.log('User was created',doc);
+//   next();
+// });
 
 const User = mongoose.model("user", userSchema);
 module.exports = User;
