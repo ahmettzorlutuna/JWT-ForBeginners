@@ -1,16 +1,17 @@
 const express = require("express");
 const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const authRoutes = require('./routes/authRoutes');
+const authRoutes = require("./routes/authRoutes");
+const cookieParser = require("cookie-parser");
 dotenv.config();
 
 const app = express();
 
-app.use(express.json())
+app.use(express.json());
 app.use(express.static("public"));
+app.use(cookieParser());
 
 app.set("view engine", "ejs");
-
 
 const dbPassword = encodeURIComponent(process.env.DB_PASSWORD);
 mongoose
@@ -27,4 +28,4 @@ mongoose
 app.get("/", (req, res) => res.render("home"));
 app.get("/smoothies", (req, res) => res.render("smoothies"));
 
-app.use("/auth",authRoutes)
+app.use("/auth", authRoutes);
