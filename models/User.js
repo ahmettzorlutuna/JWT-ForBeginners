@@ -20,13 +20,13 @@ const userSchema = new Schema({
         const emailRegex = /^([a-zA-Z0-9._-]+@[a-zA-Z0-9]+\.[a-zA-Z]{2,})$/;
         return emailRegex.test(v);
       },
-      message: (props) => `${props.value} is not a valid email address!`,
+      message: (props) => `"${props.value}" is not a valid email address!`,
     },
   },
   password: {
     type: String,
     required: [true, "Please enter a password."],
-    minLength: [6, "The password be at least 6, got {VALUE}"],
+    minLength: [6, "The password be at least 6, you got {VALUE}"],
   },
 });
 
