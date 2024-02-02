@@ -11,13 +11,13 @@ const handleError = (error) => {
     errors.email = "The email is already registered. Try another one.";
     return errors;
   }
-
+  
   if (error._message === "user validation failed") {
     Object.values(error.errors).forEach(({ properties }) => {
       errors[properties.path] = properties.message;
     });
   }
-
+  
   return errors;
 };
 
