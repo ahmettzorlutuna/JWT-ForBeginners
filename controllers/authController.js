@@ -5,7 +5,7 @@ const dotenv = require("dotenv");
 dotenv.config();
 
 const handleError = (error) => {
-  console.log(error._message, error.code);
+  console.log(error.message, error.code);
   let errors = { email: "", password: "" };
   if (error.code === 11000) {
     errors.email = "The email is already registered. Try another one.";
@@ -51,6 +51,14 @@ module.exports.signup_post = async (req, res) => {
 };
 
 module.exports.login_post = async (req, res) => {
-  console.log(req.body);
-  res.send(req.body);
+  const { email, password } = req.body;
+  try {
+    const user = await User.login(email,password);
+    if(user){
+      res.status(201).json({user: user._id})
+    }
+  } catch (err) {
+    const errors = handleError(err); 
+    res.status(400).json({})
+  }
 };
