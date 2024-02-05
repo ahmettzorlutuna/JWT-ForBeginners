@@ -14,14 +14,37 @@
 
     <script>
         const form = document.querySelector('form');
+        const emailError = document.querySelector('.email-error');
+        const passwordError = document.querySelector('.password-error');
 
-        form.addEventListener('submit', (e) => {
+        form.addEventListener('submit', async (e) => {
             e.preventDefault();
 
             const email = form.email.value;
             const password = form.password.value;
 
-            console.log(email, password);
+            try {
+                emailError.textContent = '';
+                password.textContent = '';
+                const response = await fetch('/auth/login', {
+                    method: 'POST',
+                    body: JSON.stringify({ email, password }), //({email: email,password:password}) == ({email,password})
+                    headers: {
+                        "Content-Type": "application/json"
+                    }
+                })
+                const data = await response.json(); //We turn the response in to json as data. We need take it for access error if exist.
+                console.log(data);
+                if (data.errors) {
+                    emailError.textContent = data.errors.email;
+                    passwordError.textContent = data.errors.password;
+                }
+                if (data.user) {
+                    location.assign("/");
+                }
+            } catch (error) {
+                console.log(error)
+            }
         });
     </script>
 
