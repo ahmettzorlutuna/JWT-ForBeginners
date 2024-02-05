@@ -26,7 +26,7 @@ const userSchema = new Schema({
   password: {
     type: String,
     required: [true, "Please enter a password."],
-    minLength: [6, "The password be at least 6, you got {VALUE}"],
+    minLength: [6, "The password be at least 6"],
   },
 });
 
@@ -38,6 +38,19 @@ userSchema.pre("save", async function (next) {
   this.password = hashedPassword;
   next();
 });
+
+userSchema.statics.login = async function(email,password){
+  const user = await this.findOne({email}) //Found user from the DB
+  if(user){
+    const auth = await bcrypt.compare(password,user.password) //We make a auth compare that this users password correct with coming from login form.
+    if(auth){
+      return user
+    }
+    throw Error("Password is not correct!")
+  }
+  throw Error("Email is not correct!")
+}
+
 
 //post middleware are executed after the hooked method and all of its pre middleware have completed.
 
