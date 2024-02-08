@@ -11,6 +11,14 @@ const handleError = (error) => {
     errors.email = "The email is already registered. Try another one.";
     return errors;
   }
+
+  if(error.message === 'This email is not registered'){
+    errors.email = error.message;
+  }
+
+  if(error.message === 'Password is not correct'){
+    errors.password = error.message;
+  }
   
   if (error._message === "user validation failed") {
     Object.values(error.errors).forEach(({ properties }) => {
@@ -59,6 +67,6 @@ module.exports.login_post = async (req, res) => {
     }
   } catch (err) {
     const errors = handleError(err); 
-    res.status(400).json({})
+    res.status(400).json({errors})
   }
 };
