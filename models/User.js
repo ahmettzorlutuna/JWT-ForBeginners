@@ -44,6 +44,7 @@ userSchema.statics.login = async function(email,password){
   if(user){
     const auth = await bcrypt.compare(password,user.password) //We make a auth compare that this users password correct with coming from login form.
     if(auth){
+      console.log("user döndü")
       return user
     }
     throw Error("Password is not correct")
