@@ -12,25 +12,26 @@ const handleError = (error) => {
     return errors;
   }
 
-  if(error.message === 'This email is not registered'){
+  if (error.message === "This email is not registered") {
     errors.email = error.message;
   }
 
-  if(error.message === 'Password is not correct'){
+  if (error.message === "Password is not correct") {
     errors.password = error.message;
   }
-  
+
   if (error._message === "user validation failed") {
     Object.values(error.errors).forEach(({ properties }) => {
       errors[properties.path] = properties.message;
     });
   }
-  
+
   return errors;
 };
 
 const maxAge = 3 * 24 * 60 * 60;
-const createToken = (id) => { //
+const createToken = (id) => {
+  //
   return jwt.sign({ id }, `${process.env.JWT_SIGN_SECRET}`, {
     expiresIn: maxAge,
   });
@@ -49,8 +50,8 @@ module.exports.signup_post = async (req, res) => {
   try {
     const user = await User.create({ email, password });
     const token = createToken(user._id); //Token was created. Then we will place it inside a cookie. Set as a response the cookie. (res.cookie())
-    res.cookie("jwt", token, {maxAge: maxAge * 1000}); //jwt is the name of the cookie. You can set it whatever you want.
-    res.status(201).json({user: user._id}); //Here is the important think. Be sure that you dont return full of the user object. Just return user._id.
+    res.cookie("jwt", token, { maxAge: maxAge * 1000 }); //jwt is the name of the cookie. You can set it whatever you want.
+    res.status(201).json({ user: user._id }); //Here is the important think. Be sure that you dont return full of the user object. Just return user._id.
   } catch (err) {
     console.log("hata var");
     const errors = handleError(err);
@@ -61,12 +62,17 @@ module.exports.signup_post = async (req, res) => {
 module.exports.login_post = async (req, res) => {
   const { email, password } = req.body;
   try {
-    const user = await User.login(email,password);
-    if(user){
-      res.status(201).json({user: user._id})
-    }
+    const user = await User.login(email, password);
+    const token = createToken(user._id);
+    res.cookie("jwt", token, { httpOnly: true, maxAge: maxAge * 1000 });
+    res.status(200).json({ user: user._id });
   } catch (err) {
-    const errors = handleError(err); 
-    res.status(400).json({errors})
+    const errors = handleError(err);
+    res.status(400).json({ errors });
   }
+};
+
+module.exports.logout_get = async (req, res) => {
+  res.cookie("jwt", "", {maxAge: 1}); //Removed jwt token in the cookie. We simply make this cookie age 1ms. And actually its been removed.
+  res.redirect("/"); //Redirected to home page.
 };
