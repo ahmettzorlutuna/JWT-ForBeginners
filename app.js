@@ -3,7 +3,7 @@ const mongoose = require("mongoose");
 const dotenv = require("dotenv");
 const authRoutes = require("./routes/authRoutes");
 const cookieParser = require("cookie-parser");
-const {verifyAuth} = require('./middleware/authMiddleware');
+const { verifyAuth, checkUser } = require("./middleware/authMiddleware");
 dotenv.config();
 
 const app = express();
@@ -26,7 +26,8 @@ mongoose
   )
   .catch((err) => console.log(err));
 
+app.get("*", checkUser);
 app.get("/", (req, res) => res.render("home"));
-app.get("/smoothies", verifyAuth, (req, res) => res.render("smoothies"));
+app.get("/smoothies", verifyAuth, (req, res) => res.render("smoothies")); //Called verifyAuth in there.
 
 app.use("/auth", authRoutes);
